@@ -4,14 +4,16 @@ from pydantic import BaseModel
 from typing import List, Optional
 #from app.pipelines.qa_pipeline import QAPipeline
 #from app.pipelines.embedding_pipeline import EmbeddingPipeline
-#from app.services.document_service import DocumentService
+from app.services.document_service import DocumentService
 
 router = APIRouter()
 
 #qa_pipeline = QAPipeline()
 #embedding_pipeline = EmbeddingPipeline()
-#document_service = DocumentService()
+document_service = DocumentService()
 
+class HostToScrape(BaseModel):
+    host: str
 
 class QuestionRequest(BaseModel):
     question: str
@@ -26,9 +28,17 @@ class AnswerResponse(BaseModel):
 async def root():
     return {"message": "It works!"}
 
-@router.get("/health")
-async def health_check():
-    return {"status": "ok"}
+@router.post("/host")
+async def scrape(request: HostToScrape):
+    """Create url list to fetch from host url, transform found HTML to documents and write found documents to database"""
+    try:
+        documents = document_service.process_host(request.host)
+        
+        return {"status": "ok", "document_count": len(documents)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 
 
 #@router.post("/api/v1/ask", response_model=AnswerResponse)
