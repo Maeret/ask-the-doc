@@ -1,0 +1,7 @@
+requests 
+beautifulsoup4 
+haystack-ai
+python-dotenv 
+elasticsearch 
+fastapi
+uvicorn
