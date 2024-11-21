@@ -12,8 +12,14 @@ from bs4 import BeautifulSoup
 
 load_dotenv()
 
-ssl_context = ssl.create_default_context(
-    cafile=os.environ.get(key = "SSL_CRT"))
+ssl_crt_path = os.environ.get("SSL_CRT")
+
+if ssl_crt_path and os.path.exists(ssl_crt_path):
+    print(f"Using SSL {ssl_crt_path}")
+    ssl_context = ssl.create_default_context(cafile=ssl_crt_path)
+else:
+    print("SSL certificate not found or path is incorrect. Using default context.")
+    ssl_context = ssl.create_default_context()
 
 class DocumentService:
     def __init__(self):
@@ -23,7 +29,7 @@ class DocumentService:
     async def fetch_page(self, session, url):
         """Asynchronously fetch a single page."""
         try:
-            async with session.get(url, ssl=ssl_context) as response:
+            async with session.get(url, ssl=False) as response:
                 if response.status != 200:
                     print(f"Error {response.status} for {url}")
                     return None
