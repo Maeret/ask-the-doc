@@ -5,6 +5,7 @@ import ssl
 import aiohttp
 from dotenv import load_dotenv
 from typing import List
+from urllib.parse import urljoin
 from app.components.web_scrapper import WebScrapper
 from haystack import Document
 from haystack.document_stores.in_memory import InMemoryDocumentStore
@@ -44,6 +45,8 @@ class DocumentService:
         visited = set()
         to_visit = [base_url]
         urls = []
+        
+        base_url = base_url.rstrip("/") + "/"
 
         async with aiohttp.ClientSession() as session:
             while to_visit:
@@ -62,10 +65,13 @@ class DocumentService:
                 # Get all links from the page
                 for link in soup.find_all('a', href=True):
                     href = link.get('href')
-                    if href.startswith('/') or href.startswith(base_url):
-                        full_url = href if href.startswith('http') else f"{base_url}{href}"
-                        if full_url not in visited:
-                            to_visit.append(full_url)  
+                     # Use urljoin to handle relative and absolute links properly
+                    full_url = urljoin(base_url, href)
+                    
+                    # Check if the link is within the base directory
+                    if full_url.startswith(base_url) and full_url not in visited:
+                        to_visit.append(full_url)
+
         
         return urls
 
@@ -83,7 +89,7 @@ class DocumentService:
 if __name__ == "__main__":
     # Test block for local debugging
     service = DocumentService()
-    test_host = "https://antora-playbook.lux.kube.xbet.lan/APIDocMain/stage/index.html"  # Replace with your website URL
+    test_host = "https://maeret.github.io/iframe-doc"  # Replace with your website URL
 
     async def main():
         print("Fetching URLs...")
