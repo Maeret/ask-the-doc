@@ -65,7 +65,6 @@ class DocumentService:
                 # Get all links from the page
                 for link in soup.find_all('a', href=True):
                     href = link.get('href')
-                     # Use urljoin to handle relative and absolute links properly
                     full_url = urljoin(base_url, href)
                     
                     # Check if the link is within the base directory
@@ -86,23 +85,7 @@ class DocumentService:
         self.document_store.write_documents(documents)
         return documents
 
-if __name__ == "__main__":
-    # Test block for local debugging
-    service = DocumentService()
-    test_host = "https://maeret.github.io/iframe-doc"  # Replace with your website URL
+    def get_all_documents(self) -> List[Document]:
+        """Get all documents from database"""
+        return self.document_store.get_all_documents()
 
-    async def main():
-        print("Fetching URLs...")
-        fetched_urls = await service.fetch_site_urls(test_host)
-        print(f"Fetched URLs: {fetched_urls}")
-
-        print("Processing host to generate documents...")
-        documents = await service.process_host(test_host)
-        print(f"Generated {len(documents)} documents.")
-
-        # Uncomment the following lines if you want to print document contents
-        for doc in documents[:3]:  # Print first 3 documents for brevity
-            print(f"Document content: {doc.content[:100]}...")  # Print first 100 characters
-
-    # Run the async main function
-    asyncio.run(main())
