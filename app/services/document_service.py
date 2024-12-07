@@ -23,9 +23,9 @@ else:
     ssl_context = ssl.create_default_context()
 
 class DocumentService:
-    def __init__(self):
+    def __init__(self, document_store: InMemoryDocumentStore):
         self.web_scrapper = WebScrapper()
-        self.document_store = InMemoryDocumentStore()
+        self.document_store = document_store
 
     async def fetch_page(self, session, url):
         """Asynchronously fetch a single page."""
