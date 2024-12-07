@@ -19,18 +19,20 @@ def create_qa_pipeline(document_store):
     retriever = InMemoryEmbeddingRetriever(document_store)
 
     template = """
-    You are provided with some documents from the site.
-    Use only the information from these documents to answer question.
-    If an error code is not in the document, respond with "I don't know."
+        You are provided with some documents from the site.
+        Use only the information from these documents to answer the question.
+        If the information is not in the documents, respond with "I don't know."
+        
+        Document Content:
+        {% for document in documents %}
+            Content: {{ document.content }}
+            Source URL: {{ document.meta.url }}
+        {% endfor %}
+        
+        Question: {{ question }}
+        Answer: Include the source URL in your response.
+        """
 
-    Document Content:
-    {% for document in documents %}
-        {{ document.content }}
-    {% endfor %}
-
-    Question: {{ question }}
-    Answer:
-    """
 
     prompt_builder = PromptBuilder(template=template)
 
@@ -41,7 +43,7 @@ def create_qa_pipeline(document_store):
         generation_kwargs={
             'temperature': 0.1,
             'top_k': 5,
-            'max_new_tokens': 50
+            'max_new_tokens': 30
         }
     )
 
