@@ -20,7 +20,7 @@ def create_qa_pipeline(document_store):
 
     template = """
         You are provided with some documents from the site.
-        Use only the information from these documents to answer the question.
+        Use **only** the information from these documents to answer the question.
         If the information is not in the documents, respond with "I don't know."
         
         Document Content:
