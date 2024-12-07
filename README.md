@@ -27,7 +27,7 @@ curl -X POST http://localhost:8000/fetch -d '{"base_url": "https://example.com"}
 Ask question
 
 ```bash
-curl -X POST http://localhost:8000/query -d '{"question": "What is error code 404?"}' -H "Content-Type: application/json"
+curl -X POST http://localhost:8000/query -d '{"question": "What is wallet"}' -H "Content-Type: application/json"
 ```
 
 ## Swagger Documentation
