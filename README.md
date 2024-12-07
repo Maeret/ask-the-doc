@@ -24,7 +24,12 @@ Fetch url
 curl -X POST http://localhost:8000/fetch -d '{"base_url": "https://example.com"}' -H "Content-Type: application/json"
 ```
 
-Ask question
+Get fetched documents
+```bash
+curl -X GET http://localhost:8000/documents
+```
+
+Ask a question
 
 ```bash
 curl -X POST http://localhost:8000/query -d '{"question": "What is wallet"}' -H "Content-Type: application/json"
@@ -34,5 +39,6 @@ curl -X POST http://localhost:8000/query -d '{"question": "What is wallet"}' -H 
 
 Run the server and goto 
 
+http://localhost:8000/docs
 
 

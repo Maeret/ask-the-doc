@@ -87,5 +87,5 @@ class DocumentService:
 
     def get_all_documents(self) -> List[Document]:
         """Get all documents from database"""
-        return self.document_store.get_all_documents()
+        return self.document_store.filter_documents()
 
