@@ -9,6 +9,7 @@ from urllib.parse import urljoin
 from app.components.web_scrapper import WebScrapper
 from haystack import Document
 from haystack.document_stores.in_memory import InMemoryDocumentStore
+from haystack.components.embedders import SentenceTransformersDocumentEmbedder
 from bs4 import BeautifulSoup
 
 load_dotenv()
@@ -73,6 +74,16 @@ class DocumentService:
 
         
         return urls
+    def embed_documents_in_store(self):
+        """
+        Create embeddings for all documents in the document store.
+        """
+        embedder = SentenceTransformersDocumentEmbedder(model="sentence-transformers/all-MiniLM-L6-v2")
+        embedder.warm_up()
+    
+        documents = self.document_store.filter_documents()  
+        embedder.run(documents=documents)
+        print(f"Created embeddings for {len(documents)} documents.")
 
     async def process_host(self, base_url: str) -> List[Document]:
         """Fetch pages, transform them to documents and write them to store."""
@@ -82,10 +93,25 @@ class DocumentService:
         documents = self.web_scrapper.run(urls=urls)["documents"]
         
         # Store documents in the database
-        self.document_store.write_documents(documents)
+        self.document_store.write_documents(documents)       
+        self.embed_documents_in_store()
+
+        return documents
+    
+    def get_all_documents(self) -> List[Document]:
+        """
+        Get all documents from the database and validate their content and embedding.
+        """
+        documents = self.document_store.filter_documents()
+    
+    
+        for doc in documents:
+            if not doc.content:
+                raise ValueError(f"Document {doc.id} is missing 'content'")
+            if doc.embedding is None:
+                raise ValueError(f"Document {doc.id} is missing 'embedding'")
+    
         return documents
 
-    def get_all_documents(self) -> List[Document]:
-        """Get all documents from database"""
-        return self.document_store.filter_documents()
+
 

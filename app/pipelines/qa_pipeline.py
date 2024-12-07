@@ -43,7 +43,7 @@ def create_qa_pipeline(document_store):
         generation_kwargs={
             'temperature': 0.1,
             'top_k': 5,
-            'max_new_tokens': 30
+            'max_new_tokens': 50
         }
     )
 
