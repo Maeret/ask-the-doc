@@ -1,17 +1,22 @@
 from fastapi import FastAPI, HTTPException
 from app.factory import create_services
+from pydantic import BaseModel
+
 
 app = FastAPI()
 
 qa_pipeline, document_service = create_services()
 
+class FetchRequest(BaseModel):
+    base_url: str
+
 @app.post("/fetch")
-async def fetch_site(base_url: str):
+async def fetch_site(request: FetchRequest):
     """
     Fetch site documents and store them.
     """
     try:
-        documents = await document_service.process_host(base_url)
+        documents = await document_service.process_host(request.base_url)
         return {"status": "success", "fetched": len(documents)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
