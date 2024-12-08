@@ -17,7 +17,7 @@ class WebScrapper:
                 r.raise_for_status()
                 soup = BeautifulSoup(markup=r.text, features='html.parser')
                 content = "\n".join([p.text for p in soup.find_all('p')])
-                document = Document(content=content, meta={"source": url})
+                document = Document(content=content, meta={"url": url})
                 documents.append(document)
             
             except requests.exceptions.HTTPError as http_err:

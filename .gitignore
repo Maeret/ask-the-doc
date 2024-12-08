@@ -5,3 +5,4 @@ venv/
 .DS_Store
 my_template
 template.md
+.vscode/launch.json
