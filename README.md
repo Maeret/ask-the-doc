@@ -14,7 +14,7 @@ Ask the Doc is a basic Retrieval-Augmented Generation (RAG) pipeline with an int
 
 ### Prerequisites
 1. Install Python 3.8+.
-2. Add your (https://huggingface.co/docs/hub/security-tokens)[Hugging Face token] to the `.env` file:
+2. Add your [Hugging Face token](https://huggingface.co/docs/hub/security-tokens) to the `.env` file:
 
    ```plaintext
    HUGGINGFACEHUB_API_TOKEN=your_huggingface_token
