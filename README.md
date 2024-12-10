@@ -1,11 +1,12 @@
 # Ask the Doc
 
-Ask the Doc is a basic Retrieval-Augmented Generation (RAG) pipeline with an integrated web scraper. It allows you to fetch any documentation site, store its content, and query it using an LLM (Language Model) for precise answers.
+Ask the Doc makes possible to use natural langage requests to your knowlege base or any documentation site.
+
+It is a basic Retrieval-Augmented Generation (RAG) pipeline with an integrated web scraper. It allows you to fetch any documentation site, store its content, and query it using an LLM (Language Model) for precise answers. 
 
 ## Features
 - Fetch documentation websites and store their content.
-- Query the stored content using a pre-configured QA pipeline.
-- Supports customizable templates for LLM responses.
+- Query the stored content using a pre-configured Question & Answers pipeline.
 - Ready-to-use FastAPI server for easy integration.
 
 ---
@@ -29,7 +30,11 @@ pip install -r requirements.txt
 ```bash
 uvicorn app.main:app --reload
 ```
+You can add the path to your SSL certificate in the `.env` file to enable requests to secure or private networks:
 
+```txt
+SSL_CRT = "c:\path\to\your\CERT.pem"
+```
 ---
 
 ## API Reference

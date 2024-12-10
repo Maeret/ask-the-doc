@@ -1,7 +1,7 @@
 import requests
 from typing import List
 from bs4 import BeautifulSoup
-from haystack import component, Document, Pipeline
+from haystack import component, Document
 
 @component
 class WebScrapper:
