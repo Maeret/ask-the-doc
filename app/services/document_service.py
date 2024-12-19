@@ -5,7 +5,7 @@ import ssl
 import aiohttp
 from dotenv import load_dotenv
 from typing import List
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from app.components.web_scrapper import WebScrapper
 from haystack import Document
 from haystack.document_stores.in_memory import InMemoryDocumentStore
@@ -67,11 +67,13 @@ class DocumentService:
                 for link in soup.find_all('a', href=True):
                     href = link.get('href')
                     full_url = urljoin(base_url, href)
+    
+                    parsed_url = urlparse(full_url)
+                    full_url_no_anchor = parsed_url._replace(fragment="").geturl()
                     
-                    # Check if the link is within the base directory
-                    if full_url.startswith(base_url) and full_url not in visited:
-                        to_visit.append(full_url)
-
+                # Check if the link is within the base directory and not visited
+                if full_url_no_anchor.startswith(base_url) and full_url_no_anchor not in visited:
+                    to_visit.append(full_url_no_anchor)
         
         return urls
     def embed_documents_in_store(self):
